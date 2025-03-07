@@ -1,0 +1,269 @@
+// 1. Rotate Array by K Positions
+import java.util.*;
+
+class Main {
+    public static void rotate(int[] arr, int k) {
+        int n = arr.length;
+
+        for (int i = k; i < n; i++) {
+            System.out.print(arr[i] + " ");
+        }
+
+        for (int i = 0; i < k; i++) {
+            System.out.print(arr[i] + " ");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        int n = scan.nextInt();
+        int[] arr = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = scan.nextInt();
+        }
+
+        int k = scan.nextInt();
+        rotate(arr, k);
+    }
+}
+
+// 2. Maximum Water in a Container
+import java.util.*;
+
+class Main {
+    public static int maxWater(int[] heights) {
+        int left = 0, right = heights.length - 1;
+        int area = 0;
+
+        while (left < right) {
+            int width = right - left;
+            int height_val = Math.min(heights[left], heights[right]);
+            area = Math.max(area, width * height_val);
+
+            if (heights[left] < heights[right]) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+        return area;
+    }
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        int n = scan.nextInt();
+        int[] heights = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            heights[i] = scan.nextInt();
+        }
+
+        int result = maxWater(heights);
+        System.out.println(result);
+    }
+}
+
+// 3. Sliding Window Maximum
+import java.util.*;
+
+class Main {
+    public static int[] slidingWindow(int[] nums, int k) {
+        if (nums == null || nums.length == 0) return new int[0];
+
+        int n = nums.length;
+        int[] result = new int[n - k + 1];
+        Deque<Integer> deque = new LinkedList<>();
+
+        for (int i = 0; i < n; i++) {
+            if (!deque.isEmpty() && deque.peekFirst() < i - k + 1) {
+                deque.pollFirst();
+            }
+
+            while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
+                deque.pollLast();
+            }
+
+            deque.offerLast(i);
+
+            if (i >= k - 1) {
+                result[i - k + 1] = nums[deque.peekFirst()];
+            }
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        int n = scan.nextInt();
+        int[] nums = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            nums[i] = scan.nextInt();
+        }
+
+        int k = scan.nextInt();
+        int[] result = slidingWindow(nums, k);
+
+        for (int val : result) {
+            System.out.print(val + " ");
+        }
+    }
+}
+
+// 4. Max Revenue from Sales
+import java.util.*;
+
+class Main {
+    public static int maxRevenue(int days, int period, int[] sales) {
+        int maxRevenueValue = 0;
+        int currentRevenue = 0;
+
+        for (int i = 0; i < period; i++) {
+            currentRevenue += sales[i];
+        }
+
+        maxRevenueValue = currentRevenue;
+
+        for (int i = period; i < sales.length; i++) {
+            currentRevenue = currentRevenue - sales[i - period] + sales[i];
+            maxRevenueValue = Math.max(maxRevenueValue, currentRevenue);
+        }
+        return maxRevenueValue;
+    }
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        int days = scan.nextInt();
+        int period = scan.nextInt();
+        int[] sales = new int[days];
+
+        for (int i = 0; i < days; i++) {
+            sales[i] = scan.nextInt();
+        }
+
+        int result = maxRevenue(days, period, sales);
+        System.out.println(result);
+    }
+}
+
+// 5. Unique Order
+import java.util.*;
+
+class Main {
+    public static int uniqueOrder(int[] orders) {
+        int n = orders.length;
+
+        for (int i = 0; i < n; i++) {
+            boolean isUnique = true;
+
+            for (int j = 0; j < n; j++) {
+                if (i != j && orders[i] == orders[j]) {
+                    isUnique = false;
+                    break;
+                }
+            }
+            if (isUnique) {
+                return orders[i];
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        int n = scan.nextInt();
+        int[] orders = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            orders[i] = scan.nextInt();
+        }
+
+        int result = uniqueOrder(orders);
+        System.out.println(result);
+    }
+}
+
+// 6. Rearranging Employees
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        int n = scan.nextInt();
+        int[] employees = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            employees[i] = scan.nextInt();
+        }
+
+        ArrayList<Integer> technicalEmps = new ArrayList<>();
+        ArrayList<Integer> creativeEmps = new ArrayList<>();
+
+        for (int emp : employees) {
+            if (emp >= 0) {
+                technicalEmps.add(emp);
+            } else {
+                creativeEmps.add(emp);
+            }
+        }
+
+        ArrayList<Integer> rearrangedEmps = new ArrayList<>();
+        int techIndex = 0, creativeIndex = 0;
+
+        while (techIndex < technicalEmps.size() || creativeIndex < creativeEmps.size()) {
+            if (creativeIndex < creativeEmps.size()) {
+                rearrangedEmps.add(creativeEmps.get(creativeIndex++));
+            }
+            if (techIndex < technicalEmps.size()) {
+                rearrangedEmps.add(technicalEmps.get(techIndex++));
+            }
+        }
+
+        for (int val : rearrangedEmps) {
+            System.out.print(val + " ");
+        }
+    }
+}
+
+// 7. Remove Subarray
+import java.util.*;
+
+class Main {
+    public static int remove(int[] arr, int n) {
+        int removedValues = n;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = n - 1; j >= i; j--) {
+                int[] subarray = Arrays.copyOfRange(arr, i, j + 1);
+
+                int minVal = Arrays.stream(subarray).min().orElse(Integer.MAX_VALUE);
+                int maxVal = Arrays.stream(subarray).max().orElse(Integer.MIN_VALUE);
+
+                if (2 * minVal > maxVal) {
+                    removedValues = Math.min(removedValues, i + (n - 1 - j));
+                }
+            }
+        }
+        return removedValues;
+    }
+
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+
+        int n = scan.nextInt();
+        int[] arr = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            arr[i] = scan.nextInt();
+        }
+
+        System.out.println(remove(arr, n));
+    }
+}
